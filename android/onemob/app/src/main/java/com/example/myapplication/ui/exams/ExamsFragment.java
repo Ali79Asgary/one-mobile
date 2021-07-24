@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,9 +22,11 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.myapplication.Exam;
 import com.example.myapplication.ExamListAdapter;
+import com.example.myapplication.JsonPackage.JsonGetBalance;
 import com.example.myapplication.JsonPackage.JsonGetQuizzes;
 import com.example.myapplication.R;
 import com.example.myapplication.ShowExamActivity;
+import com.example.myapplication.UtilBalance;
 import com.example.myapplication.UtilToken;
 
 import java.util.ArrayList;
@@ -32,6 +35,8 @@ public class ExamsFragment extends Fragment {
 
     private ExamsViewModel examsViewModel;
     String token;
+    TextView lblShowBalance;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,18 +49,24 @@ public class ExamsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_exams, container, false);
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},111);
 
-        final Context contextToShowExam = getContext();
-        final ListView examsListView = root.findViewById(R.id.examsListView);
-
         try {
-            token = UtilToken.token;
-            Log.d("tokenFromArg", token);
-        } catch (NullPointerException e){
+            updateBalance();
+            final Context contextToShowExam = getContext();
+            final ListView examsListView = root.findViewById(R.id.examsListView);
+            lblShowBalance = root.findViewById(R.id.lblBalanceExam);
+            lblShowBalance.setText(String.valueOf(UtilBalance.balance));
+            try {
+                token = UtilToken.token;
+                Log.d("tokenFromArg", token);
+            } catch (NullPointerException e){
+                e.printStackTrace();
+            }
+
+            JsonGetQuizzes jsonGetQuizzes = (JsonGetQuizzes) new JsonGetQuizzes(token, getActivity(), getContext(), examsListView).execute();
+
+        } catch (Exception e){
             e.printStackTrace();
         }
-
-        JsonGetQuizzes jsonGetQuizzes = (JsonGetQuizzes) new JsonGetQuizzes(token, getActivity(), getContext(), examsListView).execute();
-
         return root;
     }
 
@@ -69,6 +80,14 @@ public class ExamsFragment extends Fragment {
                     Toast.makeText(getContext(), "Permission denied...!", Toast.LENGTH_LONG).show();
                 }
             }
+        }
+    }
+
+    public void updateBalance() {
+        try {
+            JsonGetBalance jsonGetBalance = (JsonGetBalance) new JsonGetBalance(UtilToken.token).execute();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

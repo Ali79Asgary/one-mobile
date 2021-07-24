@@ -1,72 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/showQuizResultRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/showQuizResultRelativeLayout"
-    android:background="@drawable/gradient_selector">
+    android:background="@drawable/bordered_shape_nav">
 
     <LinearLayout
+        android:id="@+id/showQuizResultLinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="335dp"
         android:orientation="vertical"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="340dp"
-        android:id="@+id/showQuizResultLinearLayout">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
+            android:id="@+id/showQuizResultImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/ic_result_quiz"
-            android:layout_margin="5dp"
             android:layout_gravity="center"
-            android:id="@+id/showQuizResultImageView"/>
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_result_quiz" />
     </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/yourSelectedSwitchText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="65dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="10dp"
         android:text="گزینه انتخابی شما : "
-        android:textColor="#000000"
+        android:textColor="#0099ff"
+        android:fontFamily="@font/iran_sans_light"
+        android:textSize="12dp"
+        android:gravity="center"
         android:textStyle="bold"
-        android:textSize="15dp"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="225dp"
-        android:id="@+id/yourSelectedSwitchText"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/lblTrueSwitch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/lblYourSelectedSwitch"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/iran_sans_light"
+        android:gravity="center"
         android:text="0"
-        android:textColor="#000000"
+        android:textAlignment="center"
+        android:textColor="#0099ff"
+        android:textSize="12dp"
         android:textStyle="bold"
-        android:textSize="15dp"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="210dp"
-        android:id="@+id/lblYourSelectedSwitch"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/yourSelectedSwitchText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/trueSwitchText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="230dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="10dp"
         android:text="گزینه صحیح : "
-        android:textColor="#000000"
+        android:textColor="#0099ff"
+        android:fontFamily="@font/iran_sans_light"
+        android:textSize="12sp"
+        android:gravity="center"
         android:textStyle="bold"
-        android:textSize="15dp"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="90dp"
-        android:id="@+id/trueSwitchText"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/showQuizResultLinearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:textSize="15dp"
+        android:id="@+id/lblTrueSwitch"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="75dp"
-        android:id="@+id/lblTrueSwitch"/>
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/iran_sans_light"
+        android:gravity="center"
+        android:text="0"
+        android:textAlignment="center"
+        android:textColor="#0099ff"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/trueSwitchText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

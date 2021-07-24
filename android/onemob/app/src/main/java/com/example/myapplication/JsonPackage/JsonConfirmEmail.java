@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.LoginActivity;
 import com.example.myapplication.MainActivity;
@@ -97,14 +98,12 @@ public class JsonConfirmEmail extends AsyncTask {
         try {
             Log.d("ConfirmEmailStatus", confirmEmailStatus);
             if (confirmEmailStatus.equals("successfully verified the email")){
-                lblConfirmStatus.setTextColor(Color.parseColor("#000000"));
-                lblConfirmStatus.setText("تایید ایمیل موفقیت آمیز بود!");
+                Toast.makeText(context, "تایید ایمیل موفقیت آمیز بود!", Toast.LENGTH_LONG).show();
                 UtilResendEmail.stillResendingEmail = false;
                 Intent intentToMain = new Intent(context, MainActivity.class);
                 context.startActivity(intentToMain);
             } else {
-                lblConfirmStatus.setTextColor(Color.RED);
-                lblConfirmStatus.setText("تائید ایمیل ناموفق بود!");
+                Toast.makeText(context, "تائید ایمیل ناموفق بود!", Toast.LENGTH_LONG).show();
                 editTextConfirmEmailNotification.setText("");
             }
         } catch (Exception e){

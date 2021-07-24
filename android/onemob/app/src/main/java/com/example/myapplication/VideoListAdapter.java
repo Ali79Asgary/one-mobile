@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,19 +34,25 @@ public class VideoListAdapter extends ArrayAdapter<Video> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//        String link = getItem(position).getVideoLink();
-        String name = getItem(position).getVideoName();
-        String link = "link";
+        try {
+            //        String link = getItem(position).getVideoLink();
+            String name = getItem(position).getVideoName();
+            String link = "link";
 //        String name = "name";
+            int imageId = getItem(position).getImageId();
+            Video video = new Video(link, name, imageId);
 
-        Video video = new Video(link, name);
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            convertView = inflater.inflate(mResource, parent, false);
 
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        convertView = inflater.inflate(mResource, parent, false);
+            TextView tvName = (TextView) convertView.findViewById(R.id.lblVideoName);
+            tvName.setText(name);
 
-        TextView tvName = (TextView) convertView.findViewById(R.id.lblVideoName);
-        tvName.setText(name);
-
+            ImageView imageView = convertView.findViewById(R.id.lockVideoImageView);
+            imageView.setImageResource(imageId);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return convertView;
     }
 }

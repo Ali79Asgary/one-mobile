@@ -17,6 +17,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.myapplication.LoginActivity;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.UtilBalance;
+import com.example.myapplication.UtilToConfirmFromLogin;
 import com.example.myapplication.UtilToken;
 import com.example.myapplication.VerificationActivity;
 import com.example.myapplication.ui.notifications.NotificationsFragment;
@@ -45,6 +47,7 @@ public class JsonPostLogin extends AsyncTask {
     String httpCode;
 
     String tokenLogin = "0";
+    int balanceLogin = 0;
 
     Activity activity = null;
 
@@ -100,6 +103,7 @@ public class JsonPostLogin extends AsyncTask {
                 if (httpCode.equals("200")){
                     tokenLogin = jsonObjectToken.getString("token");
                     validEmail = jsonObjectToken.getBoolean("email_valid");
+                    balanceLogin = jsonObjectToken.getInt("balance");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -112,6 +116,7 @@ public class JsonPostLogin extends AsyncTask {
             }
             Log.d("Login Json!", result);
             Log.d("Token JsonPostLogin!", tokenLogin);
+            Log.d("BalanceLogin", String.valueOf(balanceLogin));
         } catch (Exception e){
             e.printStackTrace();
             Log.e("Whole Exception!", e.getMessage());
@@ -126,6 +131,7 @@ public class JsonPostLogin extends AsyncTask {
             if (validEmail){
                 if (httpCode.equals("200")){
                     UtilToken.token = tokenLogin;
+                    UtilBalance.balance = balanceLogin;
                     Intent intentToMain = new Intent(activity, MainActivity.class);
                     activity.startActivity(intentToMain);
                 } else if (httpCode.equals("400") || httpCode.equals("404")){
@@ -142,12 +148,10 @@ public class JsonPostLogin extends AsyncTask {
                     Toast.makeText(activity, "کاربر پیدا نشد!", Toast.LENGTH_LONG).show();
                 } else if (httpCode.equals("400")){
                     Toast.makeText(activity, "رمز عبور اشتباه است!", Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     Toast.makeText(activity, "لطفا ایمیل خود را تایید کنید!", Toast.LENGTH_LONG).show();
-                    lblLoginStatus.setTextColor(Color.RED);
-                    lblLoginStatus.setText("لطفا ایمیل خود را تایید کنید!");
                     Intent intentToVerification = new Intent(activity, VerificationActivity.class);
+                    UtilToConfirmFromLogin.isFromLogin = true;
                     activity.startActivity(intentToVerification);
                 }
             }

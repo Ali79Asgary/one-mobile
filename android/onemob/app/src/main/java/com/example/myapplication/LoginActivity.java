@@ -35,8 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
         try {
+            setContentView(R.layout.login_activity);
             setupUI();
             setupListeners();
         } catch (Exception e){
@@ -50,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPasswordLogin);
         btnLogin = findViewById(R.id.btnLogin);
         lblLoginToRegister = findViewById(R.id.lblLoginToRegistration);
-        lblLoginStatus = findViewById(R.id.lblLoginStatus);
     }
 
     private void setupListeners(){

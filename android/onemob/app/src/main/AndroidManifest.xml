@@ -16,7 +16,9 @@
         android:roundIcon="@mipmap/responsive"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ShowQuizResultActivity"></activity>
+        <activity android:name=".ShowVideoThirdActivity"></activity>
+        <activity android:name=".PaymentActivity" />
+        <activity android:name=".ShowQuizResultActivity" />
         <activity android:name=".VerificationActivity" />
         <activity android:name=".ShowVideoSecondActivity" />
         <activity android:name=".ShowVideoActivity" />

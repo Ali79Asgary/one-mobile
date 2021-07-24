@@ -57,7 +57,6 @@ public class RegistrationActivity extends AppCompatActivity {
         editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
         btnRegistration = findViewById(R.id.btnRegistration);
         lblRegistrationToLogin = findViewById(R.id.lblRegistrationToLogin);
-        lblRegistrationStatus = findViewById(R.id.lblRegistrationStatus);
     }
 
     private void setupListeners(){

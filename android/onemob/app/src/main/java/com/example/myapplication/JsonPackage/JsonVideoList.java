@@ -1,18 +1,25 @@
 package com.example.myapplication.JsonPackage;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.ShowVideoActivity;
+import com.example.myapplication.ShowVideoThirdActivity;
 import com.example.myapplication.UtilContentLengths;
+import com.example.myapplication.UtilToken;
 import com.example.myapplication.Video;
 import com.example.myapplication.VideoListAdapter;
 import com.example.myapplication.ui.videos.VideosFragment;
@@ -34,12 +41,24 @@ public class JsonVideoList extends AsyncTask {
     ArrayList<JSONObject> videosJsonObjectArrayList = new ArrayList<>();
     String[] videosName = null;
     String[] videosTitle = null;
+    int[] videosPrice = null;
+    boolean[] videosPurchased = null;
     String token;
     Activity activity = null;
     Context context = null;
     ListView videosListView;
     String path;
     File file;
+    ImageView lockVideoImageView;
+    TextView lblShowBalance;
+
+    public JsonVideoList(String token, Activity activity, Context context, ListView videosListView, ImageView lockVideoImageView) {
+        this.token = token;
+        this.activity = activity;
+        this.context = context;
+        this.videosListView = videosListView;
+        this.lockVideoImageView = lockVideoImageView;
+    }
 
     public JsonVideoList(String token, Context context, Activity activity, ListView videosListView) {
         this.token = token;
@@ -56,6 +75,15 @@ public class JsonVideoList extends AsyncTask {
         this.token = token;
         this.activity = activity;
         this.videosListView = videosListView;
+    }
+
+    public JsonVideoList(String token, Activity activity, Context context, ListView videosListView, ImageView lockVideoImageView, TextView lblShowBalance) {
+        this.token = token;
+        this.activity = activity;
+        this.context = context;
+        this.videosListView = videosListView;
+        this.lockVideoImageView = lockVideoImageView;
+        this.lblShowBalance = lblShowBalance;
     }
 
     @Override
@@ -95,6 +123,16 @@ public class JsonVideoList extends AsyncTask {
                 for (int l = 0 ; l < jsonArrayLength ; l++){
                     videosTitle[l] = videosJsonObjectArrayList.get(l).getString("title");
                 }
+
+                videosPrice = new int[jsonArrayLength];
+                for (int h = 0 ; h < jsonArrayLength ; h++){
+                    videosPrice[h] = videosJsonObjectArrayList.get(h).getInt("price");
+                }
+
+                videosPurchased = new boolean[jsonArrayLength];
+                for (int r = 0 ; r < jsonArrayLength ; r++){
+                    videosPurchased[r] = videosJsonObjectArrayList.get(r).getBoolean("purchased");
+                }
                 video1 = jsonArray.getJSONObject(0);
                 video1Name = video1.getString("name");
             } catch (IOException | JSONException e) {
@@ -109,10 +147,13 @@ public class JsonVideoList extends AsyncTask {
             Log.d("jsonArrayLength", String.valueOf(jsonArrayLength));
             for (int k = 0 ; k < videosName.length ; k++){
                 Log.d("VideosName", videosName[k]);
+                Log.d("VideosTitle", videosTitle[k]);
+                Log.d("VideosPrice", String.valueOf(videosPrice[k]));
+                Log.d("VideosPurchased", String.valueOf(videosPurchased[k]));
             }
-            for (int z = 0 ; z < videosTitle.length ; z++){
-                Log.d("VideosTitle", videosTitle[z]);
-            }
+//            for (int z = 0 ; z < videosTitle.length ; z++){
+//                Log.d("VideosTitle", videosTitle[z]);
+//            }
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -130,20 +171,43 @@ public class JsonVideoList extends AsyncTask {
                     UtilContentLengths.contentLengths.add(i, "");
                 }
             }
-            ArrayList<Video> videosList = genVideos(fileCount, videosTitle);
-            VideoListAdapter adapter = new VideoListAdapter(activity, R.layout.videos_view_layout, videosList);
+//            for (int j = 0 ; j < videosName.length ; j++){
+//                if (videosPurchased[j]){
+//                    lockVideoImageView.setImageResource(R.drawable.ic_lock_open);
+//                } else {
+//                    lockVideoImageView.setImageResource(R.drawable.ic_password);
+//                }
+//            }
+            ArrayList<Video> videosList = genVideos(fileCount, videosTitle, videosPurchased);
+            final VideoListAdapter adapter = new VideoListAdapter(activity, R.layout.videos_view_layout, videosList);
             videosListView.setAdapter(adapter);
             videosListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    JsonVideosDownload jsonVideosDownloadList = new JsonVideosDownload(token, videosTitle[position]);
-                    Intent toShowVideo = new Intent(context, ShowVideoActivity.class);
-                    toShowVideo.putExtra("tokenShowVideo", token);
-                    toShowVideo.putExtra("VideoTitleList", videosTitle[position]);
-                    toShowVideo.putExtra("videosTitle", videosTitle);
-                    toShowVideo.putExtra("videosName", videosName);
-                    toShowVideo.putExtra("position", position);
-                    context.startActivity(toShowVideo);
+                public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                    if (videosPurchased[position]){
+                        JsonVideosDownload jsonVideosDownloadList = new JsonVideosDownload(token, videosTitle[position]);
+                        Intent toShowVideo = new Intent(context, ShowVideoThirdActivity.class);
+                        toShowVideo.putExtra("tokenShowVideo", token);
+                        toShowVideo.putExtra("VideoTitleList", videosTitle[position]);
+                        toShowVideo.putExtra("videosTitle", videosTitle);
+                        toShowVideo.putExtra("videosName", videosName);
+                        toShowVideo.putExtra("position", position);
+                        context.startActivity(toShowVideo);
+                    } else {
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity);
+                        alertDialog.setTitle("فیلم                                                       ");
+                        alertDialog.setMessage("این فیلم خریداری نشده است. آیا مایل به خرید هستید؟");
+                        alertDialog.setPositiveButton("بله", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                JsonBuyVideo jsonBuyVideo = (JsonBuyVideo) new JsonBuyVideo(UtilToken.token, videosTitle[position], activity, context, videosListView, lockVideoImageView, lblShowBalance).execute();
+//                                adapter.getItem(position).setImageId(R.drawable.ic_lock_open);
+                            }
+                        });
+                        alertDialog.setNegativeButton("خیر",null);
+                        AlertDialog alert = alertDialog.create();
+                        alert.show();
+                    }
                 }
             });
         } catch (Exception e){
@@ -169,11 +233,15 @@ public class JsonVideoList extends AsyncTask {
         return filesName;
     }
 
-    private ArrayList<Video> genVideos(int fileCount, String[] videosName) {
+    private ArrayList<Video> genVideos(int fileCount, String[] videosName, boolean[] videosPurchased) {
         ArrayList<Video> videos = new ArrayList<Video>();
         Video[] arrayVideo = new Video[fileCount];
         for (int k = 0 ; k < arrayVideo.length ; k++){
-            arrayVideo[k] = new Video("link", videosName[k]);
+            if (videosPurchased[k]){
+                arrayVideo[k] = new Video("link", videosName[k], R.drawable.ic_lock_open);
+            } else {
+                arrayVideo[k] = new Video("link", videosName[k], R.drawable.ic_lock_blue);
+            }
         }
         for (int i = 0 ; i < fileCount ; i++){
             videos.add(arrayVideo[i]);

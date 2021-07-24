@@ -136,8 +136,6 @@ public class JsonPostRegistration extends AsyncTask {
         try {
             if (httpCode.equals("200")){
                 Toast.makeText(context,"ثبت نام با موفقیت انجام شد!", Toast.LENGTH_LONG).show();
-                lblRegistrationStatus.setTextColor(Color.BLUE);
-                lblRegistrationStatus.setText("ثبت نام با موفقیت انجام شد!");
                 UtilToken.token = token;
                 Log.d("UtilToken", token);
                 Intent intentToVerification = new Intent(context, VerificationActivity.class);
@@ -156,8 +154,6 @@ public class JsonPostRegistration extends AsyncTask {
                 }
             } else {
                 Toast.makeText(context,"ثبت نام موفقیت آمیز نبود!", Toast.LENGTH_LONG).show();
-                lblRegistrationStatus.setTextColor(Color.RED);
-                lblRegistrationStatus.setText("ثبت نام موفقیت آمیز نبود!");
             }
         } catch (Exception e){
             e.printStackTrace();

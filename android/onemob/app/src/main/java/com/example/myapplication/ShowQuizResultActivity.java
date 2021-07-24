@@ -1,14 +1,19 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.myapplication.ui.exams.ExamsFragment;
 
 import java.util.ArrayList;
 
@@ -62,6 +67,13 @@ public class ShowQuizResultActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Log.d("ShowQuizResult", "HelloShowQuizResult");
+//        ExamsFragment examsFragment = new ExamsFragment();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.nav_host_fragment, examsFragment).commit();
 
+        Intent intent = new Intent(ShowQuizResultActivity.this, MainActivity.class);
+        startActivity(intent);
+//        getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, examsFragment).commit();
     }
 }

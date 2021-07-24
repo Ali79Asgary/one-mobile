@@ -5,14 +5,88 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0abfbc">
+    android:background="#0099ff">
     <!--    android:paddingTop="?attr/actionBarSize">-->
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@drawable/login_button_shape"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/nav_host_fragment"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="1.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="1.0">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/lblBalance"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_marginStart="40dp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:layout_marginBottom="20dp"-->
+<!--            android:text="0"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textColor="#FFFFFF"-->
+<!--            android:textSize="20sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/lblBalanceText"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/balanceLinearLayout"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="335dp"-->
+<!--            android:layout_weight="33.3"-->
+<!--            android:orientation="vertical"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/balanceImageView"-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_margin="5dp"-->
+<!--                android:src="@drawable/ic_balance" />-->
+
+
+<!--        </LinearLayout>-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/lblBalanceText"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_marginStart="180dp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:layout_marginBottom="20dp"-->
+<!--            android:text="مقدار پول شما :"-->
+<!--            android:textColor="#FFFFFF"-->
+<!--            android:textSize="20sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/balanceLinearLayout"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#CDFC354C"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/login_layout_shape"
+        app:itemIconTint="#ffffff"
+        app:itemTextColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -25,8 +99,9 @@
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
-        android:background="@color/cardview_light_background"
+        android:layout_height="0dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/login_layout_shape"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"

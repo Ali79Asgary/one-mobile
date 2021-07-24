@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-dash:2.7.3'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.7.3'
+    implementation 'com.github.HamidrezaAmz:MagicalExoPlayer:1.0.16'
 //    implementation 'com.android.support:design:24.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.vectordrawable:vectordrawable:1.0.1'

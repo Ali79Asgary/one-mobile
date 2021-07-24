@@ -31,6 +31,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.potyvideo.library.AndExoPlayerView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,6 +54,7 @@ public class ShowVideoActivity extends AppCompatActivity {
     VideoView videoViewShow;
     SimpleExoPlayerView exoPlayerView;
     SimpleExoPlayer exoPlayer;
+    AndExoPlayerView andExoPlayerView;
     String[] videosTitle;
     String[] videosName;
 
@@ -61,14 +63,14 @@ public class ShowVideoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_video);
         try {
-//            videoViewShow = findViewById(R.id.videoViewShow);
-            exoPlayerView = findViewById(R.id.exoPLayerView);
+            videoViewShow = findViewById(R.id.videoViewShow);
+//            andExoPlayerView = findViewById(R.id.exoPLayerView);
             String token = getIntent().getExtras().getString("tokenShowVideo");
             String videoTitle = getIntent().getExtras().getString("VideoTitleList");
             int position = getIntent().getExtras().getInt("position");
             videosTitle = getIntent().getExtras().getStringArray("videosTitle");
             videosName = getIntent().getExtras().getStringArray("videosName");
-            ShowVideoAsyncTask showVideoAsyncTask = (ShowVideoAsyncTask) new ShowVideoAsyncTask(exoPlayerView, exoPlayer, position, videoTitle, token, videoViewShow, ShowVideoActivity.this, videosTitle, videosName).execute();
+            ShowVideoAsyncTask showVideoAsyncTask = (ShowVideoAsyncTask) new ShowVideoAsyncTask(andExoPlayerView, exoPlayerView, exoPlayer, position, videoTitle, token, videoViewShow, ShowVideoActivity.this, videosTitle, videosName).execute();
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -102,6 +104,8 @@ class ShowVideoAsyncTask extends AsyncTask{
 
     SimpleExoPlayerView exoPlayerView;
     SimpleExoPlayer exoPlayer;
+
+    AndExoPlayerView andExoPlayerView;
 
     int position = 0;
 
@@ -140,7 +144,8 @@ class ShowVideoAsyncTask extends AsyncTask{
         this.videosName = videosName;
     }
 
-    public ShowVideoAsyncTask(SimpleExoPlayerView exoPlayerView, SimpleExoPlayer exoPlayer, int position, String videoTitle, String token, VideoView videoView, Context context, String[] videosTitle, String[] videosName) {
+    public ShowVideoAsyncTask(AndExoPlayerView andExoPlayerView, SimpleExoPlayerView exoPlayerView, SimpleExoPlayer exoPlayer, int position, String videoTitle, String token, VideoView videoView, Context context, String[] videosTitle, String[] videosName) {
+        this.andExoPlayerView = andExoPlayerView;
         this.exoPlayerView = exoPlayerView;
         this.exoPlayer = exoPlayer;
         this.position = position;
@@ -250,6 +255,9 @@ class ShowVideoAsyncTask extends AsyncTask{
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
         try {
+            Log.d("temp0", "temp");
+            Log.d("fileVideoLength", String.valueOf(UtilContentLengths.contentLengths.get(position)));
+            Log.d("temp1", "temp");
             File[] fileThird = new File[videosName.length];
             for (int x = 0 ; x < videosName.length ; x++){
                 fileThird[x] = new File(path+"/"+videosName[x]);
@@ -263,17 +271,19 @@ class ShowVideoAsyncTask extends AsyncTask{
             String fileLength = String.valueOf(fileSecond.length());
             if (fileLength.equals(UtilContentLengths.contentLengths.get(position))){
                 Uri uri = Uri.parse(fileSecond.getAbsolutePath());
-
-                initializePlayer(fileSecond.getAbsolutePath());
+//                andExoPlayerView.setBackgroundColor(Color.BLACK);
+//                andExoPlayerView.setSource(uri.toString());
+//                initializePlayer(fileSecond.getAbsolutePath());
 
 
 //                videoView.setVideoPath(fileSecond.getAbsolutePath());
-//                videoView.setVideoURI(uri);
-//                videoView.start();
-//
-//                MediaController controller = new MediaController(context);
+                videoView.setVideoURI(uri);
+                videoView.start();
+//                videoView.setBackgroundColor(Color.BLACK);
+                MediaController controller = new MediaController(context);
+//                controller.setMediaPlayer(videoView);
 //                controller.setAnchorView(videoView);
-//                videoView.setMediaController(controller);
+                videoView.setMediaController(controller);
             } else {
                 Toast.makeText(context, "فایل به درستی دانلود نشده است. لطفا دوباره امتحان کنید!", Toast.LENGTH_LONG).show();
                 if (fileSecond.delete()){

@@ -19,7 +19,7 @@
     <string name="sign_up_page_text">صفحه ثبت نام</string>
     <string name="email_text_sign_up">ایمیل</string>
     <string name="password_text_sign_up">رمز عبور</string>
-    <string name="if_have_account_text">آیا حساب کاربری دارید؟ وارد شوید</string>
+    <string name="if_have_account_text">آیا حساب کاربری دارید؟ ورود</string>
     <string name="sign_up_button_text">ثبت نام</string>
     <string name="signUp_page_login_text">ورود</string>
     <string name="login_page_register">آیا حساب کاربری دارید؟ ثبت نام</string>

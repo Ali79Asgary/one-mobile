@@ -58,7 +58,6 @@ long timeLeftInMillsSecond = 60000;
     private void setUI(){
         editTextConfirmEmailNotification = findViewById(R.id.editTextConfirmEmailNotification);
         btnConfirmEmailNotification = findViewById(R.id.btnConfirmEmailNotification);
-        lblConfirmStatus = findViewById(R.id.lblConfirmStatus);
         lblVerificationTimer = findViewById(R.id.lblVerificationTimer);
     }
 
@@ -100,6 +99,12 @@ long timeLeftInMillsSecond = 60000;
     }
 
     public void startTimer(){
+        if (UtilToConfirmFromLogin.isFromLogin){
+            timeLeftInMillsSecond = 0;
+        } else {
+            timeLeftInMillsSecond = 60000;
+        }
+        UtilToConfirmFromLogin.isFromLogin = false;
         countDownTimer = new CountDownTimer(timeLeftInMillsSecond, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {

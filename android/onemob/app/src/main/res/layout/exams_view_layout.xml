@@ -1,36 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/showExamRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/showExamRelativeLayout"
-    android:background="@drawable/gradient_selector">
+    android:background="@drawable/bordered_shape_nav">
 
     <LinearLayout
+        android:id="@+id/showExamsLinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="335dp"
         android:orientation="vertical"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="340dp"
-        android:id="@+id/showExamsLinearLayout">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
+            android:id="@+id/showExamsImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/ic_exams"
-            android:layout_margin="5dp"
             android:layout_gravity="center"
-            android:id="@+id/showExamsImageView"/>
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_exam_blue" />
     </LinearLayout>
 
     <TextView
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:text="@string/exam_name_text"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:textSize="20dp"
+        android:id="@+id/exam_name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_centerVertical="true"
-        android:layout_marginRight="85dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/exam_name"/>
-</RelativeLayout>
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/iran_sans_light"
+        android:gravity="center_vertical"
+        android:text="@string/exam_name_text"
+        android:textColor="#0099ff"
+        android:textSize="17dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/showExamsLinearLayout"
+        app:layout_constraintStart_toEndOf="@+id/lockExamLinearLayout"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/lockExamLinearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="340dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/lockExamImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_lock_blue" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
