@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.myapplication.ExoPlayer;
 import com.example.myapplication.R;
 import com.example.myapplication.ShowVideoActivity;
 import com.example.myapplication.ShowVideoThirdActivity;
@@ -96,7 +97,7 @@ public class JsonVideoList extends AsyncTask {
                 Log.d("FILE EXISTS", file.getAbsolutePath());
             }
             OkHttpClient client = new OkHttpClient.Builder().build();
-            Request request = new Request.Builder().url("http://138.201.6.240:8000/api/videos").method("GET", null).addHeader("Authorization", "Token "+token).build();
+            Request request = new Request.Builder().url("http://138.201.6.240:8000/api/videos/").method("GET", null).addHeader("Authorization", "Token "+token).build();
             Response response = null;
             String resultVideoList = "";
             JSONObject jsonObject = null;
@@ -186,11 +187,12 @@ public class JsonVideoList extends AsyncTask {
                 public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                     if (videosPurchased[position]){
                         JsonVideosDownload jsonVideosDownloadList = new JsonVideosDownload(token, videosTitle[position]);
-                        Intent toShowVideo = new Intent(context, ShowVideoThirdActivity.class);
+                        Intent toShowVideo = new Intent(context, ExoPlayer.class);
                         toShowVideo.putExtra("tokenShowVideo", token);
                         toShowVideo.putExtra("VideoTitleList", videosTitle[position]);
                         toShowVideo.putExtra("videosTitle", videosTitle);
                         toShowVideo.putExtra("videosName", videosName);
+                        toShowVideo.putExtra("VideoName", videosName[position]);
                         toShowVideo.putExtra("position", position);
                         context.startActivity(toShowVideo);
                     } else {

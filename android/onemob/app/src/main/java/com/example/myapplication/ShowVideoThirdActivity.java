@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,16 +12,22 @@ import android.widget.VideoView;
 public class ShowVideoThirdActivity extends AppCompatActivity {
 
     VideoView videoView;
-    String videoLink = "http://138.201.6.240:8000/api/video/ksnn_compilation_master_the_internet_512kb.mp4";
+    String videoLink = "http://138.201.6.240:8000/api/video/";
+    String videoLink1 = "https://filesamples.com/samples/video/m4v/sample_960x400_ocean_with_audio.m4v";
     Uri videoUri;
+    Intent intent = getIntent();
+    String videoTitle = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_video_third);
         try {
-            Log.d("hello", "hello");
-            videoUri = Uri.parse(videoLink);
+            videoTitle = getIntent().getStringExtra("VideoTitleList");
+            Log.d("VideoTitleList", videoTitle);
+            videoLink = videoLink.concat(videoTitle).concat("/").concat(UtilToken.token);
+            Log.d("VideoLink", videoLink);
+            videoUri = Uri.parse(videoLink1);
             videoView = findViewById(R.id.videoViewShowVideos3);
             videoView.setVideoURI(videoUri);
             videoView.start();
