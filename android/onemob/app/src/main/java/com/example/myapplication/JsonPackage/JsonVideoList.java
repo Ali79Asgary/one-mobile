@@ -2,12 +2,10 @@ package com.example.myapplication.JsonPackage;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,13 +15,10 @@ import android.widget.TextView;
 
 import com.example.myapplication.ExoPlayer;
 import com.example.myapplication.R;
-import com.example.myapplication.ShowVideoActivity;
-import com.example.myapplication.ShowVideoThirdActivity;
 import com.example.myapplication.UtilContentLengths;
 import com.example.myapplication.UtilToken;
 import com.example.myapplication.Video;
 import com.example.myapplication.VideoListAdapter;
-import com.example.myapplication.ui.videos.VideosFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +27,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -96,7 +92,11 @@ public class JsonVideoList extends AsyncTask {
                 file.mkdirs();
                 Log.d("FILE EXISTS", file.getAbsolutePath());
             }
-            OkHttpClient client = new OkHttpClient.Builder().build();
+            OkHttpClient client = new OkHttpClient.Builder().
+                    connectTimeout(15, TimeUnit.SECONDS).
+                    writeTimeout(15, TimeUnit.SECONDS).
+                    readTimeout(15, TimeUnit.SECONDS).
+                    build();
             Request request = new Request.Builder().url("http://138.201.6.240:8000/api/videos/").method("GET", null).addHeader("Authorization", "Token "+token).build();
             Response response = null;
             String resultVideoList = "";

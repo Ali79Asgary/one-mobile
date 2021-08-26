@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -26,8 +27,11 @@ public class JsonConfirmEmailAgain extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] objects) {
         try {
-            OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-                    .build();
+            OkHttpClient okHttpClient = new OkHttpClient.Builder().
+                    connectTimeout(15, TimeUnit.SECONDS).
+                    writeTimeout(15, TimeUnit.SECONDS).
+                    readTimeout(15, TimeUnit.SECONDS).
+                    build();
             MediaType mediaType = MediaType.parse("text/plain");
             RequestBody body = RequestBody.create(mediaType, "");
             Request request = new Request.Builder()

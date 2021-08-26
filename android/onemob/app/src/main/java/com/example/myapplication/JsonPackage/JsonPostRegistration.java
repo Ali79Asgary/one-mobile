@@ -1,5 +1,6 @@
 package com.example.myapplication.JsonPackage;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,7 +18,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
+import es.dmoral.toasty.Toasty;
 import okhttp3.Credentials;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -37,6 +40,7 @@ public class JsonPostRegistration extends AsyncTask {
     EditText editTextConfirmPassword;
     TextView lblRegistrationStatus;
     Context context;
+    ProgressDialog progressDialog;
 
     String username = "";
     String first_name = "";
@@ -44,10 +48,23 @@ public class JsonPostRegistration extends AsyncTask {
     String email = "";
     String password = "";
     String httpCode = "";
-
     String token = "";
 
-    public JsonPostRegistration(Context context, EditText editTextFirstName, EditText editTextLastName, EditText editTextUserName, EditText editTextEmail, EditText editTextPassword, EditText editTextConfirmPassword, TextView lblRegistrationStatus, String username, String first_name, String last_name, String email, String password) {
+    public JsonPostRegistration(
+            Context context,
+            EditText editTextFirstName,
+            EditText editTextLastName,
+            EditText editTextUserName,
+            EditText editTextEmail,
+            EditText editTextPassword,
+            EditText editTextConfirmPassword,
+            TextView lblRegistrationStatus,
+            String username,
+            String first_name,
+            String last_name,
+            String email,
+            String password,
+            ProgressDialog progressDialog) {
         this.context = context;
         this.editTextFirstName = editTextFirstName;
         this.editTextLastName = editTextLastName;
@@ -61,6 +78,7 @@ public class JsonPostRegistration extends AsyncTask {
         this.last_name = last_name;
         this.email = email;
         this.password = password;
+        this.progressDialog = progressDialog;
     }
 
     public JsonPostRegistration(String username, String first_name, String last_name, String email, String password) {
@@ -85,7 +103,11 @@ public class JsonPostRegistration extends AsyncTask {
                 e.printStackTrace();
                 Log.e("JsonObject Error!", e.getMessage());
             }
-            OkHttpClient okHttpClient = new OkHttpClient();
+            OkHttpClient okHttpClient = new OkHttpClient.Builder().
+                    connectTimeout(15, TimeUnit.SECONDS).
+                    writeTimeout(15, TimeUnit.SECONDS).
+                    readTimeout(15, TimeUnit.SECONDS).
+                    build();
             String adminInfo = Credentials.basic("alireza","<!--comment>");
             RequestBody requestBody = RequestBody.create(jsonMediaType, jsonObject.toString());
             Request request = new Request.Builder().url("http://138.201.6.240:8000/api/create/").post(requestBody).addHeader("Authorization", adminInfo).build();
@@ -95,7 +117,9 @@ public class JsonPostRegistration extends AsyncTask {
             int code = 0;
             try {
                 response = okHttpClient.newCall(request).execute();
+                Log.d("ResponseRegistration", String.valueOf(response));
                 result = response.body().string();
+                Log.d("ResultPostRegistration!", result);
                 jsonObjectResult = new JSONObject(result);
                 httpCode = String.valueOf(response.code());
                 if (httpCode.equals("200")){
@@ -126,6 +150,7 @@ public class JsonPostRegistration extends AsyncTask {
         } catch (Exception e){
             e.printStackTrace();
             Log.e("Whole Exception!", e.getMessage());
+            progressDialog.dismiss();
         }
         return null;
     }
@@ -135,28 +160,33 @@ public class JsonPostRegistration extends AsyncTask {
         super.onPostExecute(o);
         try {
             if (httpCode.equals("200")){
-                Toast.makeText(context,"ثبت نام با موفقیت انجام شد!", Toast.LENGTH_LONG).show();
+                Toasty.success(context,"ثبت نام با موفقیت انجام شد!", Toast.LENGTH_LONG).show();
                 UtilToken.token = token;
                 Log.d("UtilToken", token);
                 Intent intentToVerification = new Intent(context, VerificationActivity.class);
                 context.startActivity(intentToVerification);
+                progressDialog.dismiss();
             } else if (httpCode.equals("400")){
                 if (username.equals("[\"A user with that username already exists.\"]") && email.equals("[\"Enter a valid email address.\"]")){
-                    Toast.makeText(context, "نام کاربری از قبل وجود دارد و ایمیل وارد شده معتبر نمی باشد!", Toast.LENGTH_LONG).show();
+                    Toasty.error(context, "نام کاربری از قبل وجود دارد و ایمیل وارد شده معتبر نمی باشد!", Toast.LENGTH_LONG).show();
                 } else if (username.equals("[\"A user with that username already exists.\"]") && email.equals("[\"student with this email address already exists.\"]")){
-                    Toast.makeText(context, "نام کاربری و ایمیل از قبل وجود دارند!", Toast.LENGTH_LONG).show();
-                } else if (email.equals("[\"student with this email address already exists.\"]")){
-                    Toast.makeText(context, "ایمیل از قبل وجود دارد!", Toast.LENGTH_LONG).show();
+                    Toasty.error(context, "نام کاربری و ایمیل از قبل وجود دارند!", Toast.LENGTH_LONG).show();
+                } else if (email.equals("[\"Student with this email address already exists.\"]")){
+                    Toasty.error(context, "ایمیل از قبل وجود دارد!", Toast.LENGTH_LONG).show();
                 } else if (email.equals("[\"Enter a valid email address.\"]")){
-                    Toast.makeText(context, "ایمیل وارد شده معتبر نمی باشد!", Toast.LENGTH_LONG).show();
+                    Toasty.error(context, "ایمیل وارد شده معتبر نمی باشد!", Toast.LENGTH_LONG).show();
                 } else if (username.equals("[\"A user with that username already exists.\"]")){
-                    Toast.makeText(context, "نام کاربری از قبل وجود دارد!", Toast.LENGTH_LONG).show();
+                    Toasty.error(context, "نام کاربری از قبل وجود دارد!", Toast.LENGTH_LONG).show();
                 }
+                progressDialog.dismiss();
             } else {
-                Toast.makeText(context,"ثبت نام موفقیت آمیز نبود!", Toast.LENGTH_LONG).show();
+                Toasty.error(context, "ثبت نام موفقیت آمیز نبود!", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
             }
         } catch (Exception e){
             e.printStackTrace();
+            Toasty.error(context, "خطایی رخ داده است!", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
         }
     }
 }

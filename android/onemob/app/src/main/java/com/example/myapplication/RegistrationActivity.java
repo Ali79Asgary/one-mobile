@@ -1,15 +1,21 @@
 package com.example.myapplication;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.JsonPackage.JsonPostRegistration;
+
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by tutlane on 08-01-2018.
@@ -26,6 +32,7 @@ public class RegistrationActivity extends AppCompatActivity {
     Button btnRegistration;
     TextView lblRegistrationToLogin;
     TextView lblRegistrationStatus;
+    ProgressDialog progressDialog;
 
     JsonPostRegistration jsonPostRegistration = null;
 
@@ -45,6 +52,7 @@ public class RegistrationActivity extends AppCompatActivity {
             setupListeners();
         } catch (Exception e){
             e.printStackTrace();
+            Toasty.error(getApplicationContext(), "خطایی رخ داده است!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -63,12 +71,18 @@ public class RegistrationActivity extends AppCompatActivity {
         lblRegistrationToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent registrationIntent = new Intent(RegistrationActivity.this, LoginActivity.class);
-                startActivity(registrationIntent);
+                try {
+                    Intent registrationIntent = new Intent(RegistrationActivity.this, LoginActivity.class);
+                    startActivity(registrationIntent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toasty.error(getApplicationContext(), "خطایی رخ داده است!", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         btnRegistration.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
                 firstName = editTextFirstName.getText().toString();
@@ -83,10 +97,39 @@ public class RegistrationActivity extends AppCompatActivity {
                         checkPassword = 1;
                     }
                     if (checkPassword == 1){
-                        jsonPostRegistration = (JsonPostRegistration) new  JsonPostRegistration(RegistrationActivity.this, editTextFirstName,editTextLastName,editTextUserName,editTextEmail,editTextPassword,editTextConfirmPassword,lblRegistrationStatus,userName,firstName,lastName,email,password).execute();
+                        try {
+                            progressDialog = new ProgressDialog(v.getContext());
+                            progressDialog.setMessage("Loading...");
+                            progressDialog.setCancelable(false);
+                            progressDialog.setCanceledOnTouchOutside(false);
+                            progressDialog.create();
+                            progressDialog.show();
+                            jsonPostRegistration = (JsonPostRegistration) new  JsonPostRegistration(
+                                    RegistrationActivity.this,
+                                    editTextFirstName,
+                                    editTextLastName,
+                                    editTextUserName,
+                                    editTextEmail,
+                                    editTextPassword,
+                                    editTextConfirmPassword,
+                                    lblRegistrationStatus,
+                                    userName,
+                                    firstName,
+                                    lastName,
+                                    email,
+                                    password,
+                                    progressDialog).
+                                    execute();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toasty.error(getApplicationContext(), "خطایی رخ داده است!", Toast.LENGTH_LONG).show();
+                        }
                     } else {
                         editTextConfirmPassword.setError("لطفا رمز عبور را درست وارد کنید!");
+                        Toasty.error(getApplicationContext(), "لطفا رمز عبور خود را درست وارد کنید!", Toast.LENGTH_LONG).show();
                     }
+                } else {
+                    Toasty.error(getApplicationContext(), "لطفا تمامی فیلدها را تکمیل نمایید!", Toast.LENGTH_LONG).show();
                 }
             }
         });

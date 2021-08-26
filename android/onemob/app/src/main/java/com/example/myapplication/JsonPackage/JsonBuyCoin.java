@@ -10,6 +10,8 @@ import com.example.myapplication.UtilToken;
 
 import org.json.JSONObject;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -42,7 +44,11 @@ public class JsonBuyCoin extends AsyncTask {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
+            OkHttpClient okHttpClient = new OkHttpClient.Builder().
+                    connectTimeout(15, TimeUnit.SECONDS).
+                    writeTimeout(15, TimeUnit.SECONDS).
+                    readTimeout(15, TimeUnit.SECONDS).
+                    build();
             RequestBody requestBody = RequestBody.create(jsonMediaType, String.valueOf(amountObject));
             Request request = new Request.Builder().url("http://138.201.6.240:8000/api/payment/create/").method("POST", requestBody).addHeader("Authorization", "Token "+UtilToken.token).build();
             Response response = null;

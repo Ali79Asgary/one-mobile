@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -50,7 +51,11 @@ public class JsonGetQuizzes extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] objects) {
         try {
-            OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
+            OkHttpClient okHttpClient = new OkHttpClient.Builder().
+                    connectTimeout(15, TimeUnit.SECONDS).
+                    writeTimeout(15, TimeUnit.SECONDS).
+                    readTimeout(15, TimeUnit.SECONDS).
+                    build();
             Request request = new Request.Builder().url("http://138.201.6.240:8000/api/quizzes").method("GET", null).addHeader("Authorization", "Token "+token).build();
             Response response = null;
             String resultQuizzesList = "";

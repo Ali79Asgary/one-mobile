@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -58,7 +59,11 @@ public class JsonVideosDownload extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] objects) {
         try {
-            OkHttpClient clientVideoDownload = new OkHttpClient.Builder().build();
+            OkHttpClient clientVideoDownload = new OkHttpClient.Builder().
+                    connectTimeout(15, TimeUnit.SECONDS).
+                    writeTimeout(15, TimeUnit.SECONDS).
+                    readTimeout(15, TimeUnit.SECONDS).
+                    build();
             Request requestVideoDownload = new Request.Builder().url("http://192.168.1.5:8000/api/video/"+videoTitle).method("GET", null).addHeader("Authorization", "Token "+token).build();
             responseVideoDownload = null;
             try {

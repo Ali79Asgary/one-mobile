@@ -33,6 +33,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.github.pgmacdesign:silicompressor:3.0.6'
+    compile 'com.github.GrenderG:Toasty:1.2.5'
     implementation 'com.google.android.exoplayer:exoplayer:2.11.8'
     implementation 'com.google.android.exoplayer:exoplayer-core:2.7.3'
     implementation 'com.google.android.exoplayer:exoplayer-dash:2.7.3'

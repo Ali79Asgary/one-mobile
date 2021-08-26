@@ -1,6 +1,7 @@
 package com.example.myapplication.JsonPackage;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -29,7 +30,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
+import es.dmoral.toasty.Toasty;
 import okhttp3.Credentials;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -50,18 +53,18 @@ public class JsonPostLogin extends AsyncTask {
     int balanceLogin = 0;
 
     Activity activity = null;
+    ProgressDialog progressDialog;
 
     EditText editTextUserName;
     EditText editTextPassword;
-    TextView lblLoginStatus;
 
-    public JsonPostLogin(String username, String password, Activity activity, EditText editTextUserName, EditText editTextPassword, TextView lblLoginStatus) {
+    public JsonPostLogin(String username, String password, Activity activity, EditText editTextUserName, EditText editTextPassword, ProgressDialog progressDialog) {
         this.username = username;
         this.password = password;
         this.activity = activity;
         this.editTextUserName = editTextUserName;
         this.editTextPassword = editTextPassword;
-        this.lblLoginStatus = lblLoginStatus;
+        this.progressDialog = progressDialog;
     }
 
     public JsonPostLogin() { }
@@ -87,7 +90,11 @@ public class JsonPostLogin extends AsyncTask {
                 e.printStackTrace();
                 Log.e("JsonObject Error!", e.getMessage());
             }
-            OkHttpClient okHttpClient = new OkHttpClient();
+            OkHttpClient okHttpClient = new OkHttpClient.Builder().
+                    connectTimeout(15, TimeUnit.SECONDS).
+                    writeTimeout(15, TimeUnit.SECONDS).
+                    readTimeout(15, TimeUnit.SECONDS).
+                    build();
             String adminInfo = Credentials.basic("alireza","<!--comment>");
             RequestBody requestBody = RequestBody.create(jsonMediaType, jsonObject.toString());
             Request request = new Request.Builder().url("http://138.201.6.240:8000/api/login/").post(requestBody).addHeader("Authorization",adminInfo).build();
@@ -109,10 +116,12 @@ public class JsonPostLogin extends AsyncTask {
                 e.printStackTrace();
                 tokenLogin = "0";
                 Log.e("error",e.getMessage());
+                Toasty.error(activity, "خطایی رخ داده است!", Toast.LENGTH_LONG).show();
             } catch (NullPointerException e){
                 e.printStackTrace();
                 tokenLogin = "0";
                 Log.e("error",e.getMessage());
+                Toasty.error(activity, "خطایی رخ داده است!", Toast.LENGTH_LONG).show();
             }
             Log.d("Login Json!", result);
             Log.d("Token JsonPostLogin!", tokenLogin);
@@ -120,6 +129,7 @@ public class JsonPostLogin extends AsyncTask {
         } catch (Exception e){
             e.printStackTrace();
             Log.e("Whole Exception!", e.getMessage());
+            Toasty.error(activity, "خطایی رخ داده است!", Toast.LENGTH_LONG).show();
         }
         return null;
     }
@@ -134,29 +144,35 @@ public class JsonPostLogin extends AsyncTask {
                     UtilBalance.balance = balanceLogin;
                     Intent intentToMain = new Intent(activity, MainActivity.class);
                     activity.startActivity(intentToMain);
+                    Toasty.success(activity, "ورود کاربر موفقیت آمیز بود.", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
                 } else if (httpCode.equals("400") || httpCode.equals("404")){
                     editTextUserName.setText("");
                     editTextPassword.setText("");
                     editTextUserName.setError("لطفا نام کاربری معتبر وارد کنید!");
                     editTextPassword.setError("لطفا رمز عبور معتبر وارد کنید!");
-                    Toast.makeText(activity, "نام کاربری یا رمز عبور معتبر نمی باشد!", Toast.LENGTH_LONG).show();
-                    lblLoginStatus.setTextColor(Color.RED);
-                    lblLoginStatus.setText("نام کاربری یا رمز عبور معتبر نمی باشد!");
+                    Toasty.error(activity, "نام کاربری یا رمز عبور معتبر نمی باشد!", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
                 }
             } else {
                 if (httpCode.equals("404")){
-                    Toast.makeText(activity, "کاربر پیدا نشد!", Toast.LENGTH_LONG).show();
+                    Toasty.error(activity, "کاربر پیدا نشد!", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
                 } else if (httpCode.equals("400")){
-                    Toast.makeText(activity, "رمز عبور اشتباه است!", Toast.LENGTH_LONG).show();
+                    Toasty.error(activity, "رمز عبور اشتباه است!", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
                 } else {
-                    Toast.makeText(activity, "لطفا ایمیل خود را تایید کنید!", Toast.LENGTH_LONG).show();
+                    Toasty.error(activity, "لطفا ایمیل خود را تایید کنید!", Toast.LENGTH_LONG).show();
                     Intent intentToVerification = new Intent(activity, VerificationActivity.class);
                     UtilToConfirmFromLogin.isFromLogin = true;
                     activity.startActivity(intentToVerification);
+                    progressDialog.dismiss();
                 }
             }
         } catch (Exception e){
             e.printStackTrace();
+            Toasty.error(activity, "خطایی رخ داده است!", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
         }
 
     }

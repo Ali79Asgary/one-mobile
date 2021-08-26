@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Credentials;
 import okhttp3.MediaType;
@@ -73,7 +74,11 @@ public class JsonBuyVideo extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] objects) {
         try {
-            OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
+            OkHttpClient okHttpClient = new OkHttpClient.Builder().
+                    connectTimeout(5, TimeUnit.SECONDS).
+                    writeTimeout(5, TimeUnit.SECONDS).
+                    readTimeout(5, TimeUnit.SECONDS).
+                    build();
             RequestBody requestBody = RequestBody.create(jsonMediaType, token);
             Request request = new Request.Builder().url("http://138.201.6.240:8000/api/buy-video/"+videoTitle+"/").method("POST", requestBody).addHeader("Authorization", "Token "+token).build();
             Response response = null;

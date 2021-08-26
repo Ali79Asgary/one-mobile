@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Credentials;
 import okhttp3.MediaType;
@@ -67,7 +68,11 @@ public class JsonSubmitQuiz extends AsyncTask {
             }
             String questionIdText = "{\"question_id\": ";
             String answerIdText = ",\"answer_id\": ";
-            OkHttpClient okHttpClient = new OkHttpClient().newBuilder().build();
+            OkHttpClient okHttpClient = new OkHttpClient.Builder().
+                    connectTimeout(15, TimeUnit.SECONDS).
+                    writeTimeout(15, TimeUnit.SECONDS).
+                    readTimeout(15, TimeUnit.SECONDS).
+                    build();
             String[] stringBuilderEachAnswers = new String[questionsId.size()];
             for (int i = 0 ; i < stringBuilderEachAnswers.length ; i++){
                 stringBuilderEachAnswers[i] = questionIdText+questionsId.get(i)+answerIdText+answersId.get(i)+"}";
