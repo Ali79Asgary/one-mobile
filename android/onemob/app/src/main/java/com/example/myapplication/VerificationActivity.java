@@ -141,13 +141,25 @@ long timeLeftInMillsSecond = 60000;
                         lblVerificationTimer.setText("ارسال مجدد");
                         lblVerificationTimer.setTextColor(Color.WHITE);
                         lblVerificationTimer.setOnClickListener(new View.OnClickListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                             @Override
                             public void onClick(View v) {
-                                JsonConfirmEmailAgain jsonConfirmEmailAgain = (JsonConfirmEmailAgain) new JsonConfirmEmailAgain(UtilToken.token).execute();
-                                Log.d("Timer Resend", "Resend Email");
-                                timeLeftInMillsSecond = 60000;
-                                if (UtilResendEmail.stillResendingEmail){
-                                    startTimer();
+                                try {
+                                    progressDialog = new ProgressDialog(v.getContext());
+                                    progressDialog.setMessage("Loading...");
+                                    progressDialog.setCancelable(false);
+                                    progressDialog.setCanceledOnTouchOutside(false);
+                                    progressDialog.create();
+                                    progressDialog.show();
+                                    JsonConfirmEmailAgain jsonConfirmEmailAgain = (JsonConfirmEmailAgain) new JsonConfirmEmailAgain(UtilToken.token).execute();
+                                    Log.d("Timer Resend", "Resend Email");
+                                    timeLeftInMillsSecond = 60000;
+                                    if (UtilResendEmail.stillResendingEmail){
+                                        startTimer();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Toasty.error(getApplicationContext(), "خطایی رخ داده است!", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });

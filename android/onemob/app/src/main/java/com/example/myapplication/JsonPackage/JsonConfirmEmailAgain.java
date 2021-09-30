@@ -1,7 +1,10 @@
 package com.example.myapplication.JsonPackage;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +12,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import es.dmoral.toasty.Toasty;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
@@ -19,9 +23,18 @@ import okhttp3.Response;
 public class JsonConfirmEmailAgain extends AsyncTask {
 
     String token;
+    int responseCode = 0;
+    ProgressDialog progressDialog;
+    Context context;
 
     public JsonConfirmEmailAgain(String token) {
         this.token = token;
+    }
+
+    public JsonConfirmEmailAgain(String token, ProgressDialog progressDialog, Context context) {
+        this.token = token;
+        this.progressDialog = progressDialog;
+        this.context = context;
     }
 
     @Override
@@ -44,6 +57,7 @@ public class JsonConfirmEmailAgain extends AsyncTask {
             JSONObject jsonObject = null;
             try {
                 response = okHttpClient.newCall(request).execute();
+                responseCode = response.code();
                 result = response.body().string();
                 jsonObject = new JSONObject(result);
             } catch (IOException | JSONException e) {
@@ -56,5 +70,22 @@ public class JsonConfirmEmailAgain extends AsyncTask {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(Object o) {
+        super.onPostExecute(o);
+        try {
+            if (responseCode == 200) {
+                Toasty.success(context, "کد تایید ایمیل دوباره ارسال شد!", Toast.LENGTH_LONG).show();
+            } else {
+                Toasty.error(context, "خطایی رخ داده است!", Toast.LENGTH_LONG).show();
+            }
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toasty.error(context, "خطایی رخ داده است!", Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
+        }
     }
 }

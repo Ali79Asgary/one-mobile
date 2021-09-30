@@ -132,7 +132,7 @@ public class JsonConfirmEmail extends AsyncTask {
             }
         } catch (Exception e){
             e.printStackTrace();
-            Toasty.error(context, "تائید ایمیل ناموفق بود!", Toast.LENGTH_LONG).show();
+            Toasty.error(context, "خطایی رخ داده است!", Toast.LENGTH_LONG).show();
             progressDialog.dismiss();
         }
     }

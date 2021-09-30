@@ -169,7 +169,7 @@ public class JsonPostRegistration extends AsyncTask {
             } else if (httpCode.equals("400")){
                 if (username.equals("[\"A user with that username already exists.\"]") && email.equals("[\"Enter a valid email address.\"]")){
                     Toasty.error(context, "نام کاربری از قبل وجود دارد و ایمیل وارد شده معتبر نمی باشد!", Toast.LENGTH_LONG).show();
-                } else if (username.equals("[\"A user with that username already exists.\"]") && email.equals("[\"student with this email address already exists.\"]")){
+                } else if (username.equals("[\"A user with that username already exists.\"]") && email.equals("[\"Student with this email address already exists.\"]")){
                     Toasty.error(context, "نام کاربری و ایمیل از قبل وجود دارند!", Toast.LENGTH_LONG).show();
                 } else if (email.equals("[\"Student with this email address already exists.\"]")){
                     Toasty.error(context, "ایمیل از قبل وجود دارد!", Toast.LENGTH_LONG).show();
